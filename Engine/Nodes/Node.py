@@ -15,7 +15,7 @@ class Node:
         if parent_node is not None:
             self.application = parent_node.application
             parent_node.add_node(self)
-            self.nodes = [] * self.application.node_container_size
+            self.nodes = [[] for _ in range(self.application.node_container_size)]
 
     def add_node(self, other: "Node") -> None:
         self.nodes[other.render_priority].append(other)
@@ -24,6 +24,8 @@ class Node:
         self.content.append(other)
 
     def render(self) -> None:
+        for i in range(len(self.content)):
+            self.content[i].render()
         for i in range(len(self.nodes)):
             for j in range(len(self.nodes[i])):
                 self.nodes[i][j].render()

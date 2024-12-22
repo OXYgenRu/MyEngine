@@ -14,7 +14,7 @@ class Application(arcade.Window):
         self.window_size: tuple = window_size
         self.node_container_size: int = 10
 
-        self.scene_system: SceneSystem = SceneSystem()
+        self.scene_system: SceneSystem = SceneSystem(self)
 
     def set_node_container_size(self, new_node_container_size: int) -> None:
         if new_node_container_size <= 0:
