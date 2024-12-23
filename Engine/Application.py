@@ -21,6 +21,7 @@ class Application(arcade.Window):
             raise ValueError(f"New node container size must be greater than 0, got {new_node_container_size}")
         self.node_container_size = new_node_container_size
 
-    def on_draw(self):
+    def on_draw(self) -> None:
         arcade.start_render()
         self.scene_system.active_scene.render()
+        arcade.finish_render()
