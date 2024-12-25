@@ -19,8 +19,10 @@ class ShapesTest(Scene):
         super().__init__(application)
         print("setup")
         self.polygon = PolygonNode(self, numpy.array([[100, 100], [200, 100], [200, 200], [100, 200]]), 0)
-        self.circle = CircleNode(self, np.array([700, 400]), radius=50, color=(0, 255, 0), width=2)
-        self.text = TextNode(self, "скибиди доб доб ес ес", point=np.array([700, 100]))
+        self.node1 = Node(self)
+        self.circle = CircleNode(self.node1, np.array([700, 400]), radius=50, color=(0, 255, 0), width=2)
+        self.node2 = Node(self)
+        self.text = TextNode(self.node2, "скибиди доб доб ес ес", point=np.array([700, 100]))
 
 
 if __name__ == "__main__":

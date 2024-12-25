@@ -14,7 +14,13 @@ class Application(arcade.Window):
         self.window_size: tuple = window_size
         self.node_container_size: int = 10
 
+        self.flatten_render_tree: list = []
+        self.flatten_update_tree: list = []
+        self.indexes: (int, int) = (0, 0)
+
         self.scene_system: SceneSystem = SceneSystem(self)
+
+        # self.set_update_rate(2)
 
     def set_node_container_size(self, new_node_container_size: int) -> None:
         if new_node_container_size <= 0:
@@ -23,5 +29,13 @@ class Application(arcade.Window):
 
     def on_draw(self) -> None:
         arcade.start_render()
-        self.scene_system.active_scene.render()
+        for i in range(self.indexes[0]):
+            self.flatten_update_tree[i].render()
         arcade.finish_render()
+
+    def on_update(self, delta_time: float):
+        self.indexes = self.scene_system.active_scene.get_tree(self.flatten_render_tree,
+                                                               self.flatten_update_tree, True,
+                                                               True, 0, 0)
+        for i in range(self.indexes[1]):
+            self.flatten_update_tree[i].update(delta_time)
