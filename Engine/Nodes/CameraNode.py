@@ -1,33 +1,40 @@
-from collections import defaultdict
-import numpy as np
-from typing import Optional
+import arcade
+import numpy
+
+from Engine.Nodes.ControlNodes.ControlNode import ControlNode
+from Engine.Nodes.Node import Node
 
 
-class Node:
+class CameraNode(Node):
     def __init__(self, parent_node: "Node" = None, render_priority: int = 0):
-        self.nodes: list = []
-        self.content: list = []
-        self.render_priority: int = render_priority
-        self.application = None
-        self.render_flag: bool = True
-        self.update_flag: bool = True
+        super().__init__(parent_node, render_priority)
+        self.arcade_camera: arcade.Camera2D = arcade.Camera2D()
 
-        if parent_node is not None:
-            self.application = parent_node.application
-            parent_node.add_node(self)
-            self.nodes = [[] for _ in range(self.application.node_container_size)]
+        self.camera_cleaner: CameraCleaner = CameraCleaner(self.application)
 
-    def add_node(self, other: "Node") -> None:
-        self.nodes[other.render_priority].append(other)
+        self.view_point: numpy.array = numpy.array([self.application.width // 2, self.application.height // 2],
+                                                   dtype=float)
+        self.zoom: float = 1
 
-    def add_content(self, other) -> None:
-        self.content.append(other)
+        self.camera_control = ControlNode(self)
+        self.camera_control.on_mouse_scroll = self.on_mouse_scroll
+        self.camera_control.on_mouse_drag = self.on_mouse_drag
+
+    def on_mouse_drag(self, x: float, y: float, dx: float, dy: float, button: int, modifiers: int):
+        if button != 2:
+            return
+        self.view_point += numpy.array([-dx, -dy], dtype=float) / self.zoom
+
+    def on_mouse_scroll(self, x: float, y: float, scroll_x: float, scroll_y: float):
+        if scroll_y < 0:
+            self.zoom *= 0.75
+            return
+        self.zoom /= 0.75
 
     def render(self) -> None:
-        pass
-
-    def update(self, delta_time: float):
-        pass
+        self.arcade_camera.zoom = self.zoom
+        self.arcade_camera.position = self.view_point
+        self.arcade_camera.use()
 
     def get_tree(self, flatten_render_tree: list, flatten_update_tree: list, render_flag: bool,
                  update_flag: bool, render_index: int, update_index: int) -> (int, int):
@@ -62,4 +69,18 @@ class Node:
                                                                 update_index + added_update_index)
                 added_render_index += indexes[0]
                 added_update_index += indexes[1]
+        if render_flag:
+            if len(flatten_render_tree) == render_index + added_render_index:
+                flatten_render_tree.append(None)
+            flatten_render_tree[render_index + added_render_index] = self.camera_cleaner
+            added_render_index += 1
         return added_render_index, added_update_index
+
+
+class CameraCleaner:
+    def __init__(self, application):
+        self.camera_cleaned: arcade.Camera2D = arcade.Camera2D()
+        self.camera_cleaned.position = numpy.array([application.width // 2, application.height // 2], dtype=float)
+
+    def render(self) -> None:
+        self.camera_cleaned.use()

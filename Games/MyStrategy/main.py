@@ -4,6 +4,7 @@ import numpy as np
 
 from Engine.Application import Application
 from Engine.GameScene import Scene
+from Engine.Nodes.CameraNode import CameraNode
 from Engine.Nodes.ControlNodes.ControlNode import ControlNode
 from Engine.Nodes.Node import Node
 from Engine.Nodes.RenderNodes.Shapes import PolygonNode, CircleNode
@@ -36,17 +37,31 @@ class ShapesTest(Scene):
     def __init__(self, application: "Application"):
         super().__init__(application)
         print("setup")
-        self.polygon = PolygonNode(self, numpy.array([[100, 100], [200, 100], [200, 200], [100, 200]]), 0)
-        self.node1 = Node(self)
+        self.camera = CameraNode(self)
+        self.camera_control = ControlNode(self)
+        # self.camera_control.on_mouse_scroll = self.camera_zoom
+        # self.camera_control.on_mouse_motion = self.camera_motion
+        self.polygon = PolygonNode(self.camera, numpy.array([[100, 100], [200, 100], [200, 200], [100, 200]]), 0)
+        self.node1 = Node(self.camera)
         self.circle = CircleNode(self.node1, np.array([700, 400]), radius=50, color=(0, 255, 0), width=2)
-        self.node2 = Node(self)
+        self.node2 = Node(self.camera)
         self.text = TextNode(self.node2, "скибиди доб доб ес ес", point=np.array([700, 100]))
+
+    # def camera_motion(self, x, y, dx, dy):
+    #     self.camera.view_point += numpy.array([dx, dy])
+    #
+    # def camera_zoom(self, x, y, scroll_x, scroll_y):
+    #     print(scroll_y)
+    #     if scroll_y < 0:
+    #         self.camera.zoom *= 0.75
+    #     else:
+    #         self.camera.zoom /= 0.75
 
 
 if __name__ == "__main__":
     game = Application((1280, 720), __file__)
     game.scene_system.register_scene(ShapesTest, "1")
     game.scene_system.register_scene(ControlTest, "2")
-    game.scene_system.set_new_scene("2")
+    game.scene_system.set_new_scene("1")
     print(game.game_folder)
     game.run()

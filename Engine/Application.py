@@ -18,7 +18,6 @@ class Application(arcade.Window):
         self.flatten_render_tree: list = []
         self.flatten_update_tree: list = []
         self.indexes: (int, int) = (0, 0)
-
         self.scene_system: SceneSystem = SceneSystem(self)
         self.control_system: ControlSystem = ControlSystem(self)
 
@@ -30,15 +29,15 @@ class Application(arcade.Window):
         self.node_container_size = new_node_container_size
 
     def on_draw(self) -> None:
-        arcade.start_render()
+        self.clear()
         for i in range(self.indexes[0]):
-            self.flatten_update_tree[i].render()
-        arcade.finish_render()
+            self.flatten_render_tree[i].render()
 
     def on_update(self, delta_time: float) -> None:
         self.indexes = self.scene_system.active_scene.get_tree(self.flatten_render_tree,
                                                                self.flatten_update_tree, True,
                                                                True, 0, 0)
+        repr(self.indexes)
         self.control_system.update()
 
         for i in range(self.indexes[1]):
