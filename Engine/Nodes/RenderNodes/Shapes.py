@@ -8,7 +8,7 @@ class PolygonNode(ContentNode):
     def __init__(self, parent_node: "Node" = None, points: np.array = np.array([]),
                  width: int = 0, color: tuple = (255, 255, 255)):
         super().__init__(parent_node)
-        self.points: np.array = points
+        self.points: np.array = points.astype(float)
         self.width: int = width
         self.color: tuple = color
 
@@ -23,7 +23,7 @@ class CircleNode(ContentNode):
     def __init__(self, parent_node: "Node" = None, point: np.array = np.array([]), radius: int = 0, width: int = 0,
                  color: tuple = (255, 255, 255)):
         super().__init__(parent_node)
-        self.point: np.array = point
+        self.point: np.array = point.astype(float)
         self.radius: int = radius
         self.width: int = width
         self.color: tuple = color

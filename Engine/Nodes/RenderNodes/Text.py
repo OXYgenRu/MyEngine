@@ -11,7 +11,7 @@ class TextNode(ContentNode):
                  font_size=24, anchor_x="center", anchor_y="center"):
         super().__init__(parent_node)
         self.text: str = text
-        self.point: np.array = point
+        self.point: np.array = point.astype(float)
         self.color: tuple = color
         self.font_size: int = font_size
         self.anchor_x: str = anchor_x

@@ -4,6 +4,7 @@ from typing import Optional
 
 import arcade
 
+from Engine.ApplicationSystems.ControlSystem import ControlSystem
 from Engine.ApplicationSystems.SceneSystem import SceneSystem
 
 
@@ -19,8 +20,9 @@ class Application(arcade.Window):
         self.indexes: (int, int) = (0, 0)
 
         self.scene_system: SceneSystem = SceneSystem(self)
+        self.control_system: ControlSystem = ControlSystem(self)
 
-        # self.set_update_rate(2)
+        self.set_update_rate(0.006)
 
     def set_node_container_size(self, new_node_container_size: int) -> None:
         if new_node_container_size <= 0:
@@ -33,9 +35,32 @@ class Application(arcade.Window):
             self.flatten_update_tree[i].render()
         arcade.finish_render()
 
-    def on_update(self, delta_time: float):
+    def on_update(self, delta_time: float) -> None:
         self.indexes = self.scene_system.active_scene.get_tree(self.flatten_render_tree,
                                                                self.flatten_update_tree, True,
                                                                True, 0, 0)
+        self.control_system.update()
+
         for i in range(self.indexes[1]):
             self.flatten_update_tree[i].update(delta_time)
+
+    def on_key_press(self, symbol: int, modifiers: int) -> None:
+        self.control_system.on_key_press(symbol, modifiers)
+
+    def on_key_release(self, symbol: int, modifiers: int) -> None:
+        self.control_system.on_key_release(symbol, modifiers)
+
+    def on_mouse_press(self, x: float, y: float, button: int, modifiers: int) -> None:
+        self.control_system.on_mouse_press(x, y, button, modifiers)
+
+    def on_mouse_release(self, x: float, y: float, button: int, modifiers: int) -> None:
+        self.control_system.on_mouse_release(x, y, button, modifiers)
+
+    def on_mouse_motion(self, x: float, y: float, dx: float, dy: float) -> None:
+        self.control_system.on_mouse_motion(x, y, dx, dy)
+
+    def on_mouse_drag(self, x: float, y: float, dx: float, dy: float, button: int, modifiers: int) -> None:
+        self.control_system.on_mouse_drag(x, y, dx, dy, button, modifiers)
+
+    def on_mouse_scroll(self, x: float, y: float, scroll_x: float, scroll_y: float) -> None:
+        self.control_system.on_mouse_scroll(x, y, scroll_x, scroll_y)
