@@ -29,6 +29,12 @@ class Node:
     def update(self, delta_time: float):
         pass
 
+    def set_render_flag(self, new_render_flag: bool):
+        self.render_flag = new_render_flag
+
+    def set_update_flag(self, new_update_flag: bool):
+        self.update_flag = new_update_flag
+
     def get_tree(self, flatten_render_tree: list, flatten_update_tree: list, render_flag: bool,
                  update_flag: bool, render_index: int, update_index: int) -> (int, int):
         added_render_index: int = 0

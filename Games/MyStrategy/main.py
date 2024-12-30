@@ -39,24 +39,17 @@ class ShapesTest(Scene):
         print("setup")
         self.camera = CameraNode(self)
         self.camera_control = ControlNode(self)
-        # self.camera_control.on_mouse_scroll = self.camera_zoom
-        # self.camera_control.on_mouse_motion = self.camera_motion
         self.polygon = PolygonNode(self.camera, numpy.array([[100, 100], [200, 100], [200, 200], [100, 200]]), 0)
         self.node1 = Node(self.camera)
         self.circle = CircleNode(self.node1, np.array([700, 400]), radius=50, color=(0, 255, 0), width=2)
         self.node2 = Node(self.camera)
         self.text = TextNode(self.node2, "скибиди доб доб ес ес", point=np.array([700, 100]))
+        self.node3 = Node(self, render_priority=1)
+        self.text_ui = TextNode(self.node3, "скибиди доб доб ес ес", point=np.array([200, 100]), color=(255, 125, 125))
 
-    # def camera_motion(self, x, y, dx, dy):
-    #     self.camera.view_point += numpy.array([dx, dy])
-    #
-    # def camera_zoom(self, x, y, scroll_x, scroll_y):
-    #     print(scroll_y)
-    #     if scroll_y < 0:
-    #         self.camera.zoom *= 0.75
-    #     else:
-    #         self.camera.zoom /= 0.75
-
+    def update(self, delta_time: float):
+        # print(1 / delta_time)
+        pass
 
 if __name__ == "__main__":
     game = Application((1280, 720), __file__)
