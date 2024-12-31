@@ -17,7 +17,15 @@ class TextNode(ContentNode):
         self.font_size: int = font_size
         self.anchor_x: str = anchor_x
         self.anchor_y: str = anchor_y
+        self.text_object = arcade.Text(self.text, point[0], point[1], self.color, self.font_size, anchor_x=anchor_x,
+                                       anchor_y=anchor_y)
 
     def render(self) -> None:
-        arcade.draw_text(self.text, self.point[0], self.point[1], self.color, self.font_size, 0, anchor_x=self.anchor_x,
-                         anchor_y=self.anchor_y)
+        self.text_object.text = self.text
+        self.text_object.x = self.point[0]
+        self.text_object.y = self.point[1]
+        self.text_object.color = self.color
+        self.text_object.font_size = self.font_size
+        self.text_object.anchor_x = self.anchor_x
+        self.text_object.anchor_y = self.anchor_y
+        self.text_object.draw()
