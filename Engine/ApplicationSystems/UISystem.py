@@ -25,24 +25,30 @@ class UISystem:
 
     def get_collider(self, x: float, y: float):
         pos: np.array = np.array([x, y], dtype=float)
-
-        for i in range(self.index):
+        display_center: np.array = np.array([self.application.width // 2, self.application.height // 2], dtype=float)
+        original_pos: np.array = np.array([x, y], dtype=float)
+        for i in range(self.index - 1, -1, -1):
             if isinstance(self.flatten_ui_tree[i], UIColliderNode) and self.flatten_ui_tree[i].polygon.contains(
                     shapely.geometry.Point(pos)):
                 return self.flatten_ui_tree[i]
             if isinstance(self.flatten_ui_tree[i], CameraCleaner):
-                pos = np.array([x, y], dtype=float)
+                pos = original_pos - display_center
+                pos += (self.flatten_ui_tree[i].parent.view_point - display_center) * self.flatten_ui_tree[
+                    i].parent.zoom
+                pos /= self.flatten_ui_tree[i].parent.zoom
+                pos += display_center
             if isinstance(self.flatten_ui_tree[i], CameraNode):
-                pos = (np.array([x, y] - np.array([self.application.width // 2, self.application.height // 2]),
-                                dtype=float))
-                pos += (self.flatten_ui_tree[i].view_point - np.array(
-                    [self.application.width // 2, self.application.height // 2])) * self.flatten_ui_tree[i].zoom
-                pos /= self.flatten_ui_tree[i].zoom
-                pos += np.array([self.application.width // 2, self.application.height // 2])
-                print(pos)
+                pos = original_pos
 
     def on_mouse_press(self, x: float, y: float, button: int, modifiers: int) -> None:
-        print(self.get_collider(x, y))
+        collider = self.get_collider(x, y)
+        if collider is None:
+            return
+        collider.on_mouse_press(button, modifiers)
 
     def on_mouse_release(self, x: float, y: float, button: int, modifiers: int) -> None:
-        pass
+        collider = self.get_collider(x, y)
+        if collider is None:
+            return
+        print(collider)
+        collider.on_mouse_release(button, modifiers)

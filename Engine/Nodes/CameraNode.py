@@ -10,7 +10,7 @@ class CameraNode(Node):
         super().__init__(parent_node, render_priority)
         self.arcade_camera: arcade.Camera2D = arcade.Camera2D()
 
-        self.camera_cleaner: CameraCleaner = CameraCleaner(self.application)
+        self.camera_cleaner: CameraCleaner = CameraCleaner(self.application, self)
 
         self.view_point: numpy.array = numpy.array([self.application.width // 2, self.application.height // 2],
                                                    dtype=float)
@@ -83,9 +83,10 @@ class CameraNode(Node):
 
 
 class CameraCleaner:
-    def __init__(self, application):
+    def __init__(self, application, parent: CameraNode):
         self.camera_cleaned: arcade.Camera2D = arcade.Camera2D()
         self.camera_cleaned.position = numpy.array([application.width // 2, application.height // 2], dtype=float)
+        self.parent: CameraNode = parent
 
     def render(self) -> None:
         self.camera_cleaned.use()
