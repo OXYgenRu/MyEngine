@@ -6,6 +6,7 @@ import arcade
 
 from Engine.ApplicationSystems.ControlSystem import ControlSystem
 from Engine.ApplicationSystems.SceneSystem import SceneSystem
+from Engine.ApplicationSystems.UISystem import UISystem
 
 
 class Application(arcade.Window):
@@ -20,6 +21,7 @@ class Application(arcade.Window):
         self.indexes: (int, int) = (0, 0)
         self.scene_system: SceneSystem = SceneSystem(self)
         self.control_system: ControlSystem = ControlSystem(self)
+        self.ui_system: UISystem = UISystem(self)
 
         self.set_update_rate(0.006)
 
@@ -37,8 +39,8 @@ class Application(arcade.Window):
         self.indexes = self.scene_system.active_scene.get_tree(self.flatten_render_tree,
                                                                self.flatten_update_tree, True,
                                                                True, 0, 0)
-        repr(self.indexes)
         self.control_system.update()
+        self.ui_system.update()
 
         for i in range(self.indexes[1]):
             self.flatten_update_tree[i].update(delta_time)
@@ -51,9 +53,11 @@ class Application(arcade.Window):
 
     def on_mouse_press(self, x: float, y: float, button: int, modifiers: int) -> None:
         self.control_system.on_mouse_press(x, y, button, modifiers)
+        self.ui_system.on_mouse_press(x, y, button, modifiers)
 
     def on_mouse_release(self, x: float, y: float, button: int, modifiers: int) -> None:
         self.control_system.on_mouse_release(x, y, button, modifiers)
+        self.ui_system.on_mouse_release(x, y, button, modifiers)
 
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float) -> None:
         self.control_system.on_mouse_motion(x, y, dx, dy)

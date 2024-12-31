@@ -9,6 +9,7 @@ from Engine.Nodes.ControlNodes.ControlNode import ControlNode
 from Engine.Nodes.Node import Node
 from Engine.Nodes.RenderNodes.Shapes import PolygonNode, CircleNode
 from Engine.Nodes.RenderNodes.Text import TextNode
+from Engine.Nodes.UINodes.UIColliderNode import UIColliderNode
 
 
 class Node1(Node):
@@ -40,6 +41,7 @@ class ShapesTest(Scene):
         self.camera = CameraNode(self)
         self.camera_control = ControlNode(self)
         self.polygon = PolygonNode(self.camera, numpy.array([[100, 100], [200, 100], [200, 200], [100, 200]]), 0)
+        self.ui_collider = UIColliderNode(self.camera, self.polygon.points)
         self.node1 = Node(self.camera)
         self.circle = CircleNode(self.node1, np.array([700, 400]), radius=50, color=(0, 255, 0), width=2)
         self.node2 = Node(self.camera)
@@ -50,6 +52,7 @@ class ShapesTest(Scene):
     def update(self, delta_time: float):
         # print(1 / delta_time)
         pass
+
 
 if __name__ == "__main__":
     game = Application((1280, 720), __file__)

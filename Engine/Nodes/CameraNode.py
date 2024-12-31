@@ -74,6 +74,11 @@ class CameraNode(Node):
                 flatten_render_tree.append(None)
             flatten_render_tree[render_index + added_render_index] = self.camera_cleaner
             added_render_index += 1
+        if update_flag:
+            if len(flatten_update_tree) == update_index + added_update_index:
+                flatten_update_tree.append(None)
+            flatten_update_tree[update_index + added_update_index] = self.camera_cleaner
+            added_update_index += 1
         return added_render_index, added_update_index
 
 
@@ -84,3 +89,6 @@ class CameraCleaner:
 
     def render(self) -> None:
         self.camera_cleaned.use()
+
+    def update(self, delta_time: float) -> None:
+        pass
