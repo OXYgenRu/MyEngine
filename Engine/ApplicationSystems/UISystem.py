@@ -50,5 +50,10 @@ class UISystem:
         collider = self.get_collider(x, y)
         if collider is None:
             return
-        print(collider)
         collider.on_mouse_release(button, modifiers)
+
+    def on_mouse_motion(self, x: float, y: float, dx: float, dy: float) -> None:
+        collider = self.get_collider(x, y)
+        if collider is None:
+            return
+        collider.on_mouse_motion()

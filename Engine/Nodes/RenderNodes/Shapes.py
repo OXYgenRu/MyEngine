@@ -28,6 +28,7 @@ class CircleNode(ContentNode):
         self.width: int = width
         self.color: tuple = color
 
+
     def render(self) -> None:
         if self.width == 0:
             arcade.draw_circle_filled(self.point[0], self.point[1], self.radius, self.color)

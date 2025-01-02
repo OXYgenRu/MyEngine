@@ -61,6 +61,7 @@ class Application(arcade.Window):
 
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float) -> None:
         self.control_system.on_mouse_motion(x, y, dx, dy)
+        self.ui_system.on_mouse_motion(x, y, dx, dy)
 
     def on_mouse_drag(self, x: float, y: float, dx: float, dy: float, button: int, modifiers: int) -> None:
         self.control_system.on_mouse_drag(x, y, dx, dy, button, modifiers)

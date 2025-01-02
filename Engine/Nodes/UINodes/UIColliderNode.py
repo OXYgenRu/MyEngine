@@ -16,3 +16,6 @@ class UIColliderNode(ContentNode):
 
     def on_mouse_release(self, button: int, modifiers: int):
         pass
+
+    def on_mouse_motion(self) -> None:
+        pass
