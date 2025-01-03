@@ -18,7 +18,7 @@ class Application(arcade.Window):
 
         self.flatten_render_tree: list = []
         self.flatten_update_tree: list = []
-        self.indexes: (int, int) = (0, 0)
+        self.indexes: tuple[int, int] = (0, 0)
         self.scene_system: SceneSystem = SceneSystem(self)
         self.control_system: ControlSystem = ControlSystem(self)
         self.ui_system: UISystem = UISystem(self)
